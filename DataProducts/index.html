@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Credit Card 16 Digit Validation</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Credit Card 16 Digit Validation">
+  <meta name="author" content="Yuani Chen">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  <link rel=stylesheet href="./assets/css/ribbons.css"></link>
+
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  <hgroup class="auto-fadein">
+    <h1>Credit Card 16 Digit Validation</h1>
+    <h2></h2>
+    <p>Yuani Chen<br/></p>
+  </hgroup>
+  <article></article>  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  <hgroup>
+    <h2>Did You Know?</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>There are many security functions built into your credit card. One of which includes a numbering system for the 16 digits of your credit card.</p>
+
+<p>It appears that the 16th digit of your credit card number is a result of the 1st 15 digits!</p>
+
+<h2>The Math Behind It</h2>
+
+<p>The calculation of the 16th digit utilises the Luhn algorithm.</p>
+
+<p>The Luhn algorithm or Luhn formula, also known as the &quot;modulus 10&quot; or &quot;mod 10&quot; algorithm, is a simple checksum formula used to validate a variety of identification numbers, such as credit card numbers, IMEI numbers, National Provider Identifier numbers in the US, and Canadian Social Insurance Numbers. </p>
+
+<p>Source: Wikipedia</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-2" style="background:;">
+  <hgroup>
+    <h2>Using the App</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>First the user enters the 1st 15 digits of his/her credit card number in the field provided.</p>
+
+<pre><code class="r">textInput(&quot;cc_number15&quot;,&quot;Enter the 1st 15 Digits of the Credit Card No. :&quot;,value=&quot;&quot;)   
+</code></pre>
+
+<p>&lt;!--html_preserve--&gt;<div class="form-group shiny-input-container">
+<label for="cc_number15">Enter the 1st 15 Digits of the Credit Card No. :</label>
+<input id="cc_number15" type="text" class="form-control" value=""/>
+</div>&lt;!--/html_preserve--&gt;</p>
+
+<p>Then click on the button to find your 16th digit!</p>
+
+<pre><code class="r">  actionButton(&quot;checkButton&quot;,&quot;Find the 16th Digit!&quot;)
+</code></pre>
+
+<p>&lt;!--html_preserve--&gt;<button id="checkButton" type="button" class="btn btn-default action-button">Find the 16th Digit!</button>&lt;!--/html_preserve--&gt;</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-3" style="background:;">
+  <hgroup>
+    <h2>Result! - Checking input values</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>The action button triggers the calculation on the server side.</p>
+
+<p>First, we check that exactly 15 digits were entered into the field.</p>
+
+<pre><code class="r"> output$len15&lt;-renderText({ if (str_length(input$cc_number15)!=15) 
+      {&quot;Please enter 15 digits ONLY!&quot;
+        } 
+      else  
+      {return(&quot;You have entered 15 digits.&quot;)
+      }
+  })
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-4" style="background:;">
+  <hgroup>
+    <h2>Results! - Final calculation</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>On condition that 15 digits have been entered, we then evaluate the 16th digit.
+Here is a snapshot of the final calculation. We return d16 as the resultant value in the UI.</p>
+
+<pre><code class="r"> d16 &lt;- if(str_length(input$cc_number15)==15)
+
+      {
+        if ((round_any(d16_pre,10)-d16_pre)&gt;=0)
+      {round_any(d16_pre,10)-d16_pre} else
+      {round_any(d16_pre,10)+10-d16_pre}
+      }
+      else
+      {return(&quot;&quot;)}
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='Did You Know?'>
+         1
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='Using the App'>
+         2
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='Result! - Checking input values'>
+         3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='Results! - Final calculation'>
+         4
+      </a>
+    </li>
+  </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <script src="shared/shiny.js" type="text/javascript"></script>
+  <script src="shared/slider/js/jquery.slider.min.js"></script>
+  <script src="shared/bootstrap/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="shared/slider/css/jquery.slider.min.css"></link>
+  
+  <!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>
